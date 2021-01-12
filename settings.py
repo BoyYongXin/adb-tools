@@ -10,7 +10,9 @@ tasks = [
     # {'serialno': '192.168.1.140:5555', 'target': 'push'},
     # {'serialno': '192.168.1.136:5555', 'target': 'push'},
     # {'serialno': '192.168.1.129:5555', 'target': 'push'},
-    {'serialno': '192.168.1.116:5555', 'target': 'push'},
+    # {'serialno': '192.168.1.116:5555', 'target': 'push'},
+    {'serialno': '192.168.1.124:5555', 'target': 'push'},
+    {'serialno': '192.168.1.128:5555', 'target': 'push'},
 ]
 
 need_packages = ["com.ss.android.article.news", "com.UCMobile", "com.tencent.reading", "com.baidu.searchbox",

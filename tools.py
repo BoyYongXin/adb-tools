@@ -8,19 +8,20 @@ import sys
 filter_devices = ['192.168.1.102:5555', '192.168.1.103:5555', '192.168.1.104:5555', '192.168.1.108:5555',
                   '192.168.1.110:5555', '192.168.1.112:5555', '192.168.1.114:5555', '192.168.1.116:5555',
                   '192.168.1.117:5555', '192.168.1.118:5555', '192.168.1.119:5555', '192.168.1.121:5555',
-                  '192.168.1.130:5555','192.168.1.126:5555']
+                  '192.168.1.130:5555', '192.168.1.126:5555']
 
 # need_packages = ["com.android.settings", "com.hipu.yidian", "com.jifen.qukan", "com.tencent.news",
 #                  "com.sohu.newsclient", "com.sina.weibo", "com.sina.news", "com.ifeng.news2"]
-need_packages = ["com.ss.android.article.news","com.UCMobile","com.tencent.reading","com.baidu.searchbox","com.ifeng.news2",
-                 "com.netease.newsreader.activity","com.tencent.android.qqdownloader","com.android.chrome"]
-
+need_packages = ["com.ss.android.article.news", "com.UCMobile", "com.tencent.reading", "com.baidu.searchbox",
+                 "com.ifeng.news2",
+                 "com.netease.newsreader.activity", "com.tencent.android.qqdownloader", "com.android.chrome"]
 
 need_packages = ["com.ss.android.ugc.aweme"]
 
 # need_packages = ["com.android.settings"]
 
 apks_path = "./apks/"
+
 
 def reboot_phone(device):
     """
@@ -30,6 +31,7 @@ def reboot_phone(device):
     """
     cmd = 'adb -s {device} reboot'.format(device=device)
     return os.popen(cmd)
+
 
 # 获取所有在线手机的序列号
 def get_devices_udid():
@@ -92,6 +94,7 @@ def get_phone_apk_path(devices, packages: list):
         path_list.append(get_paths)
     return path_list
 
+
 def show():  # <7>
     """
     刷新系统文件
@@ -99,6 +102,7 @@ def show():  # <7>
     """
     # print(text, end=' ')
     sys.stdout.flush()
+
 
 # 将手机中的apk下拉到本地文件
 def export_phone_apk(devices, app_path, pc_path):
@@ -110,9 +114,11 @@ def export_phone_apk(devices, app_path, pc_path):
 
 # adb安装 apk
 def adb_install_apk(devices, apk):
-    cmd = "adb -s " + devices + " install {apk}".format(apk=apk)
+    cmd = "adb -s " + devices + " install -t {apk}".format(apk=apk)
+    print(cmd)
     res = os.popen(cmd)
     return res.readline()
+
 
 # 将手机中的apk上传到手机文件
 def export_pc_apk(devices, app_path, pc_path):
@@ -128,6 +134,7 @@ def re_sting_title(str):
     str = re.sub("[\!\%\[\]\,\。\?\'\"\@\*\&\、\:\;\$\\\\/]", "", str)
     return str
 
+
 def start_app2(device, apk_name):
     """
     adb 自动化初始化打开手机apk，root权限
@@ -138,6 +145,7 @@ def start_app2(device, apk_name):
     cmd = "adb -s {} shell su -c monkey -p {} 2".format(device, apk_name)
     return os.popen(cmd)
 
+
 def adb_start_apk(device, apk_name, activity_name=""):
     """
     adb 自动化初始化打开手机apk
@@ -147,10 +155,20 @@ def adb_start_apk(device, apk_name, activity_name=""):
     result = os.popen("adb -s {device} shell am start {apk_name}/.{activity_name}".
                       format(device=device, apk_name=apk_name, activity_name=activity_name))
     return result
+
+
+def set_phone_time(device):
+    ## dd/mm/yyyy格式
+    date = time.strftime("%m%d%H%M")
+    cmd = "adb -s {} shell date {}.00".format(device,date)
+    result = os.popen(cmd)
+    return result
+
+
 if __name__ == '__main__':
     online_phone = get_devices_udid()
     print(online_phone)
-    devices = "192.168.1.112:5555" # online_phone[0]
+    devices = "192.168.1.112:5555"  # online_phone[0]
 
     ## 获取手机系统版本
     # ss = get_platforms_version()
@@ -177,4 +195,4 @@ if __name__ == '__main__':
             logger.info(res)
             show()
             logger.info("开始睡眠30秒")
-            time.sleep(30)#需要手动改名字，暂停三十秒
+            time.sleep(30)  # 需要手动改名字，暂停三十秒
